@@ -11,7 +11,7 @@ func main() {
 	file := &resources.File{
 		Path:    "./test.txt",
 		Mode:    0644,
-		Content: "This is a test",
+		Content: "This is a test\n",
 		Owner:   "johnhooks",
 		Group:   "staff",
 	}

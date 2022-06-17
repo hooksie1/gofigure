@@ -46,9 +46,6 @@ func (t *Template) SetSource(s string) *Template {
 
 func (t *Template) Apply() error {
 	_, err := os.Stat(t.Dest)
-	if err == nil {
-		return err
-	}
 
 	if err != nil && !os.IsNotExist(err) {
 		return err
