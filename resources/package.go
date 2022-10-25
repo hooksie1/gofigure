@@ -8,8 +8,10 @@ type DNFPkg struct {
 	Name string
 }
 
-func NewDNFPkg() *DNFPkg {
-	return &DNFPkg{}
+func NewDNFPkg(name string) *DNFPkg {
+	return &DNFPkg{
+		Name: name,
+	}
 }
 
 func (p *DNFPkg) Apply() error {
