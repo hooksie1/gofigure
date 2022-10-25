@@ -60,15 +60,15 @@ func (t *Template) Create() error {
 		return err
 	}
 
-	var buf bytes.Buffer
+	buf := bytes.NewBuffer(nil)
 
-	if err := templ.Execute(&buf, t.Vars); err != nil {
+	if err := templ.Execute(buf, t.Vars); err != nil {
 		return err
 	}
 
 	f := File{
 		Mode:    t.Mode,
-		Content: string(buf.Bytes()),
+		Content: buf.Bytes(),
 		Path:    t.Dest,
 		Owner:   t.Owner,
 		Group:   t.Group,

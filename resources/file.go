@@ -7,12 +7,11 @@ import (
 	"os"
 	"os/user"
 	"strconv"
-	"strings"
 )
 
 type File struct {
 	Mode    uint32
-	Content string
+	Content []byte
 	Path    string
 	Owner   string
 	Group   string
@@ -39,14 +38,12 @@ func (f *File) CreateOrOpen() error {
 		return err
 	}
 
-	buf := bytes.NewBuffer(nil)
-
-	_, err = io.Copy(buf, file)
-	if err != nil {
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, bytes.NewReader(f.Content)); err != nil {
 		return err
 	}
 
-	same, err := CompareSums(buf, strings.NewReader(f.Content))
+	same, err := CompareSums(file, &buf)
 	if err != nil {
 		return err
 	}
@@ -97,7 +94,7 @@ func (f *File) Chown() error {
 }
 
 func (f *File) Write(w io.Writer) error {
-	if _, err := w.Write([]byte(f.Content)); err != nil {
+	if _, err := w.Write(f.Content); err != nil {
 		return err
 	}
 	return nil
