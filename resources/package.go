@@ -4,22 +4,22 @@ import (
 	"os/exec"
 )
 
-type Pkg struct {
+type DNFPkg struct {
 	Name string
 }
 
-func NewPkg() *Pkg {
-	return &Pkg{}
+func NewDNFPkg() *DNFPkg {
+	return &DNFPkg{}
 }
 
-func (p *Pkg) Apply() error {
+func (p *DNFPkg) Apply() error {
 	cmd := exec.Command("dnf", "install", "-y", p.Name)
 
 	return cmd.Run()
 }
 
-func (p *Pkg) Remove() error {
-	cmd := exec.Command("apt", "remove", "-y", p.Name)
+func (p *DNFPkg) Remove() error {
+	cmd := exec.Command("dnf", "remove", "-y", p.Name)
 
 	return cmd.Run()
 
