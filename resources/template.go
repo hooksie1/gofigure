@@ -44,6 +44,11 @@ func (t *Template) SetSource(s string) *Template {
 	return t
 }
 
+func (t *Template) SetVars(m map[string]any) *Template {
+	t.Vars = m
+	return t
+}
+
 func (t *Template) Apply() error {
 	_, err := os.Stat(t.Dest)
 
