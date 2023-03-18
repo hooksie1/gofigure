@@ -21,7 +21,12 @@ func main() {
 		log.Println(err)
 	}
 
-	t := resources.NewTemplate().SetSource("./thing.tmpl").SetDest("./thing.sh").SetMode(0755).SetOwner("jhooks").
+	tmpl, err := os.Open("thing.tmpl")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	t := resources.NewTemplate().SetSource(tmpl).SetDest("./thing.sh").SetMode(0755).SetOwner("jhooks").
 		SetGroup("jhooks").SetVars(map[string]any{
 		"name": "john",
 	})
@@ -38,6 +43,12 @@ func main() {
 	}
 
 	if err := gofigure.Exists(cmd); err != nil {
+		log.Println(err)
+	}
+
+	timer := resources.NewSystemdUnit().SetDescription("this is a test").SetName("test").SetType(resources.Timer).SetSchedule("*-*-*-*")
+
+	if err := gofigure.Exists(timer); err != nil {
 		log.Println(err)
 	}
 

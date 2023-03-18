@@ -2,13 +2,14 @@ package resources
 
 import (
 	"bytes"
+	"io"
 	"os"
 	"text/template"
 )
 
 type Template struct {
 	Mode   uint32
-	Source string
+	Source io.Reader
 	Dest   string
 	Owner  string
 	Group  string
@@ -39,8 +40,8 @@ func (t *Template) SetGroup(g string) *Template {
 	return t
 }
 
-func (t *Template) SetSource(s string) *Template {
-	t.Source = s
+func (t *Template) SetSource(r io.Reader) *Template {
+	t.Source = r
 	return t
 }
 
@@ -60,7 +61,13 @@ func (t *Template) Apply() error {
 }
 
 func (t *Template) Create() error {
-	templ, err := template.ParseFiles(t.Source)
+	var b bytes.Buffer
+	_, err := b.ReadFrom(t.Source)
+	if err != nil {
+		return err
+	}
+
+	templ, err := template.New("templ").Parse(b.String())
 	if err != nil {
 		return err
 	}
